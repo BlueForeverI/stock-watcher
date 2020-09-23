@@ -42,5 +42,5 @@ func main() {
 	myRouter.HandleFunc("/products", allProducts).Methods("GET")
 	myRouter.HandleFunc("/products/{id}", productByID)
 	myRouter.HandleFunc("/products", createProduct).Methods("POST")
-	log.Fatal(http.ListenAndServe(":9090", myRouter))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
 }
