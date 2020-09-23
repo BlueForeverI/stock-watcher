@@ -38,7 +38,6 @@ func createProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	db.AutoMigrate(&Product{})
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.HandleFunc("/products", allProducts).Methods("GET")
 	myRouter.HandleFunc("/products/{id}", productByID)
