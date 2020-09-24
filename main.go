@@ -62,6 +62,18 @@ func getUserStocks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(stocks)
 }
 
+func deleteStock(w http.ResponseWriter, r *http.Request) {
+	userID, _ := strconv.Atoi(mux.Vars(r)["id"])
+	var user User
+	db.Find(&user, userID)
+
+	stockID, _ := strconv.Atoi(mux.Vars(r)["stockId"])
+	var stock Stock
+	db.Find(&stock, stockID)
+
+	db.Model(&user).Association("Stocks").Delete([]Stock{stock})
+}
+
 func main() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.Use(commonMiddleware)
@@ -70,6 +82,7 @@ func main() {
 	myRouter.HandleFunc("/login", login).Methods("POST")
 	myRouter.HandleFunc("/users/{id}/stocks", addStock).Methods("POST")
 	myRouter.HandleFunc("/users/{id}/stocks", getUserStocks).Methods("GET")
+	myRouter.HandleFunc("/users/{id}/stocks/{stockId}", deleteStock).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
 }
