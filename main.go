@@ -79,6 +79,7 @@ func main() {
 	myRouter.Use(commonMiddleware)
 
 	myRouter.HandleFunc("/stocks", getAllStocks)
+	myRouter.HandleFunc("/stocks/trending", getTrendingStocks)
 	myRouter.HandleFunc("/login", login).Methods("POST")
 	myRouter.HandleFunc("/users/{id}/stocks", addStock).Methods("POST")
 	myRouter.HandleFunc("/users/{id}/stocks", getUserStocks).Methods("GET")
