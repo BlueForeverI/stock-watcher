@@ -83,6 +83,7 @@ func main() {
 	myRouter.HandleFunc("/login", login).Methods("POST")
 	myRouter.HandleFunc("/users/{id}/stocks", addStock).Methods("POST")
 	myRouter.HandleFunc("/users/{id}/stocks", getUserStocks).Methods("GET")
+	myRouter.HandleFunc("/users/{id}/watchlist", getWatchlist(db))
 	myRouter.HandleFunc("/users/{id}/stocks/{stockId}", deleteStock).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
