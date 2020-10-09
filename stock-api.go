@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -11,8 +12,15 @@ import (
 
 func getAllStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		query, hasParam := r.URL.Query()["query"]
 		var stocks []Stock
-		db.Find(&stocks)
+
+		if !hasParam {
+			db.Find(&stocks)
+		} else {
+			clause := fmt.Sprintf("%%%s%%", query[0])
+			db.Where("Name LIKE ? OR Symbol LIKE ?", clause, clause).Find(&stocks)
+		}
 		json.NewEncoder(w).Encode(stocks)
 	}
 }
