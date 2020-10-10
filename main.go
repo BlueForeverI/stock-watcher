@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"./src"
+	"stockwatcher/src"
+
 	"github.com/gorilla/mux"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
