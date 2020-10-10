@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"encoding/json"
@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func getAllStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
+func GetAllStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		query, hasParam := r.URL.Query()["query"]
 		var stocks []Stock
@@ -25,7 +25,7 @@ func getAllStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-func addStock(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
+func AddStock(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userId, _ := strconv.Atoi(mux.Vars(r)["id"])
 		var stock Stock
@@ -39,7 +39,7 @@ func addStock(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-func getUserStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
+func GetUserStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userId, _ := strconv.Atoi(mux.Vars(r)["id"])
 		var user User
@@ -51,7 +51,7 @@ func getUserStocks(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-func deleteStock(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
+func DeleteStock(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID, _ := strconv.Atoi(mux.Vars(r)["id"])
 		var user User

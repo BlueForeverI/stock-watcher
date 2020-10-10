@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"./src"
 	"github.com/gorilla/mux"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -15,15 +16,15 @@ func main() {
 	myRouter.Use(commonMiddleware)
 
 	db, _ := gorm.Open(mysql.Open(os.Getenv("MYSQL_CONN")), &gorm.Config{})
-	myRouter.HandleFunc("/login", login(db)).Methods("POST", "OPTIONS")
+	myRouter.HandleFunc("/login", src.Login(db)).Methods("POST", "OPTIONS")
 
-	myRouter.HandleFunc("/stocks", getAllStocks(db))
-	myRouter.HandleFunc("/stocks/trending", getTrendingStocks)
+	myRouter.HandleFunc("/stocks", src.GetAllStocks(db))
+	myRouter.HandleFunc("/stocks/trending", src.GetTrendingStocks)
 
-	myRouter.HandleFunc("/users/{id}/stocks", getUserStocks(db)).Methods("GET", "OPTIONS")
-	myRouter.HandleFunc("/users/{id}/stocks", addStock(db)).Methods("POST", "OPTIONS")
-	myRouter.HandleFunc("/users/{id}/stocks/{stockId}", deleteStock(db)).Methods("DELETE", "OPTIONS")
-	myRouter.HandleFunc("/users/{id}/watchlist", getWatchlist(db))
+	myRouter.HandleFunc("/users/{id}/stocks", src.GetUserStocks(db)).Methods("GET", "OPTIONS")
+	myRouter.HandleFunc("/users/{id}/stocks", src.AddStock(db)).Methods("POST", "OPTIONS")
+	myRouter.HandleFunc("/users/{id}/stocks/{stockId}", src.DeleteStock(db)).Methods("DELETE", "OPTIONS")
+	myRouter.HandleFunc("/users/{id}/watchlist", src.GetWatchlist(db))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), myRouter))
 }

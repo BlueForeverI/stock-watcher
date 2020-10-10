@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"encoding/json"
@@ -50,7 +50,7 @@ type StockPriceResponse struct {
 	QuoteType QuoteType  `json:"quoteType"`
 }
 
-func getTrendingStocks(w http.ResponseWriter, r *http.Request) {
+func GetTrendingStocks(w http.ResponseWriter, r *http.Request) {
 	url := "https://apidojo-yahoo-finance-v1.p.rapidapi.com/market/get-trending-tickers"
 	client := http.Client{}
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -62,7 +62,7 @@ func getTrendingStocks(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resData.Finance.Result[0].Quotes)
 }
 
-func getWatchlist(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
+func GetWatchlist(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userId, _ := strconv.Atoi(mux.Vars(r)["id"])
 		var user User

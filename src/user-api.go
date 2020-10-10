@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ type LoginRequest struct {
 	Email string `json:"email"`
 }
 
-func login(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
+func Login(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var existingUser User
 		var request LoginRequest
