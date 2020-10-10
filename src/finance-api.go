@@ -46,6 +46,7 @@ type QuoteType struct {
 }
 
 type StockPriceResponse struct {
+	StockId   uint
 	Price     StockPrice `json:"price"`
 	QuoteType QuoteType  `json:"quoteType"`
 }
@@ -73,7 +74,7 @@ func GetWatchlist(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 
 		stockPrices := make(chan StockPriceResponse, len(stocks))
 		for i := 0; i < len(stocks); i++ {
-			go getStockPrice(stocks[i].Symbol, stockPrices)
+			go getStockPrice(stocks[i].Symbol, stockPrices, stocks[i].ID)
 		}
 
 		var result []StockPriceResponse
@@ -85,7 +86,7 @@ func GetWatchlist(db *gorm.DB) func(http.ResponseWriter, *http.Request) {
 	}
 }
 
-func getStockPrice(symbol string, ch chan StockPriceResponse) {
+func getStockPrice(symbol string, ch chan StockPriceResponse, stockId uint) {
 	url := "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-profile?symbol=" + symbol
 	client := http.Client{}
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -94,5 +95,6 @@ func getStockPrice(symbol string, ch chan StockPriceResponse) {
 	var resData StockPriceResponse
 
 	json.NewDecoder(res.Body).Decode(&resData)
+	resData.StockId = stockId
 	ch <- resData
 }
